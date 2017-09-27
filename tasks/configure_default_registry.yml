@@ -2,8 +2,8 @@
   uri:
     method: PUT
     status_code: 200
-    user: "{{ rancher_api_key_global_token }}"
-    password: "{{ rancher_api_key_global_secret }}"
+    user: "{{ rancher_api_key }}"
+    password: "{{ rancher_api_secret }}"
     body:
       id: registry.default
       source: Database
