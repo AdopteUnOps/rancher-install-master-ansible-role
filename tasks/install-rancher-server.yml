@@ -1,0 +1,28 @@
+- name: launch master
+  docker_container:
+    name: rancherServer
+    image: "{{rancher_master_image}}"
+    restart_policy: always
+    state: started
+    ports:
+    - "{{rancher_master_port}}:8080"
+    - "{{rancher_master_cluster_port}}:9345"
+    #required if you have a mirror registry
+    env:
+      CATTLE_BOOTSTRAP_REQUIRED_IMAGE="{{rancher_agent_image}}"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: [
+      "--db-host {{ mysql_host }}",
+      "--db-port {{mysql_port}}",
+      "--db-user {{ mysql_user }}",
+      "--db-pass {{ mysql_password }}",
+      "--db-name {{ mysql_database }}",
+      "--advertise-address {{ rancher_master_advertise_address }}"
+    ]
+  become: true
+
+- name: Wait until server is up
+  wait_for:
+    port: "{{ rancher_master_port }}"
+    delay: 30

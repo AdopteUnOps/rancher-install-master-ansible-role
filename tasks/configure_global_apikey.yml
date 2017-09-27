@@ -1,0 +1,45 @@
+- name: Verify if global apikey exists
+  stat: path="{{rancher_global_apikey_path}}"
+  register: apikey_file
+  delegate_to: localhost
+
+- name: Add global api key
+  uri:
+   method: POST
+   status_code: 201
+   url: "{{rancher_master_url}}/v1/apikey"
+   body : ' {"type":"apikey","accountId":"1a1","name":"global_ansible","description":null,"created":null,"kind":null,"removeTime":null,"removed":null,"uuid":null}'
+   HEADER_Accept: "application/json"
+   HEADER_Content-Type: "application/json"
+   return_content: yes
+  register: fluxApiKey
+  when: apikey_file.stat.exists == False
+
+- set_fact:
+    rancher_api_key_project_token: "{{ fluxApiKey.json['publicValue'] }}"
+    rancher_api_key_project_secret: "{{ fluxApiKey.json['secretValue'] }}"
+  when: apikey_file.stat.exists == False
+
+- name: Verify group_vars/all folder exist
+  file: path="{{ rancher_global_apikey_path | dirname }}" state=directory
+  delegate_to: localhost
+
+- name: Generate global apikey configuration
+  template:  src=global-apikey.j2 dest="{{rancher_global_apikey_path}}"
+  delegate_to: localhost
+  when: apikey_file.stat.exists == False
+
+- debug: msg="Rancher global apikey generated. You can now vault it with './ansible-vault_wrapper {{rancher_global_apikey_path}}'"
+  when: apikey_file.stat.exists == False
+
+- name: Enable access control !
+  uri:
+   method: POST
+   status_code: 201
+   url: "{{ rancher_master_url }}/v1/localauthconfigs"
+   user: "{{ rancher_api_key_project_token }}"
+   password: "{{ rancher_api_key_project_secret }}"
+   HEADER_Accept: "application/json"
+   HEADER_Content-Type: "application/json"
+   body: ' {"accessMode":"unrestricted", "enabled":true, "name":"{{ rancher_default_username }}", "password":"{{ rancher_default_password }}", "username":"{{ rancher_default_username }}"}'
+  when: apikey_file.stat.exists == False

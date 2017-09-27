@@ -1,0 +1,3 @@
+- include: install_rancher_server.yml
+- include: configure_global_apikey.yml
+- include: configure_default_registry.yml

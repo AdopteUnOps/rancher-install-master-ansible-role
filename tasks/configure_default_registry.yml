@@ -1,0 +1,14 @@
+- name: Configure default registry
+  uri:
+    method: PUT
+    status_code: 200
+    user: "{{rancher_api_key_project_token }}"
+    password: "{{ rancher_api_key_project_secret }}"
+    body:
+      id: registry.default
+      source: Database
+      name: registry.default
+      value: "{{ docker_registry }}"
+    body_format: json
+    url: "{{ rancher_master_url }}/v2-beta/settings/registry.default"
+  when: docker_registry != ""
