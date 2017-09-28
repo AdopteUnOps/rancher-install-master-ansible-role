@@ -5,6 +5,7 @@ rancher_agent_image: "rancher/agent:{{ rancher_agent_version }}"
 rancher_version: "v1.6.10"
 rancher_agent_version: "v1.2.6"
 
+rancher_master_host: "{{ ansible_default_ipv4.address }}"
 rancher_master_port: 8080
 rancher_master_cluster_port: 9345
 rancher_master_advertise_address: "{{ ansible_default_ipv4.address }}"
