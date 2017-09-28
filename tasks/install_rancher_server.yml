@@ -23,6 +23,10 @@
   become: true
 
 - name: Wait until server is up
-  wait_for:
-    port: "{{ rancher_master_port }}"
-    delay: 30
+  uri:
+    url: "{{ rancher_master_url }}"
+    status_code: 200
+    register: result
+    until: result.status == 200
+    retries: 60
+    delay: 1
