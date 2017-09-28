@@ -30,7 +30,7 @@ rancher_default_password: "changeme"
 
 #this is the internal database and must be overridden for production environment
 # weird but if empty rancher will use internal Database
-mysql_host: ""
+mysql_host: "''"
 mysql_port: 3306
 mysql_database: cattle
 mysql_user: cattle
