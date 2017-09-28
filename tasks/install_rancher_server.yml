@@ -26,7 +26,7 @@
   uri:
     url: "{{ rancher_master_url }}"
     status_code: 200
-    register: result
-    until: result.status == 200
-    retries: 60
-    delay: 1
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 1
