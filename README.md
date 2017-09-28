@@ -28,11 +28,12 @@ rancher_global_apikey_path: "{{ inventory_dir }}/group_vars/all/apikey"
 rancher_default_username: "devops"
 rancher_default_password: "changeme"
 
+#this is the internal database and must be overridden for production environment
 mysql_host: localhost
 mysql_port: 3306
-mysql_database: rancher
-mysql_user: rancher
-mysql_password: rancher
+mysql_database: cattle
+mysql_user: cattle
+mysql_password: cattle
 
 docker_registry: ""
 ```
