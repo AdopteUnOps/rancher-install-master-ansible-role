@@ -24,7 +24,7 @@
 
 - name: Wait until server is up
   uri:
-    url: "{{ rancher_master_url }}"
+    url: "{{ rancher_master_url }}/ping"
     status_code: 200
   register: result
   until: result.status == 200
