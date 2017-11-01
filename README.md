@@ -36,7 +36,7 @@ mysql_database: cattle
 mysql_user: cattle
 mysql_password: cattle
 
-docker_registry: ""
+docker_default_registry: ""
 ```
 License
 -------

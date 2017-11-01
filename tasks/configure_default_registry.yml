@@ -8,7 +8,7 @@
       id: registry.default
       source: Database
       name: registry.default
-      value: "{{ docker_registry }}"
+      value: "{{ docker_default_registry }}"
     body_format: json
     url: "{{ rancher_master_url }}/v2-beta/settings/registry.default"
-  when: docker_registry != ""
+  when: docker_default_registry != ""
